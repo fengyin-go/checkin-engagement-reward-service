@@ -55,8 +55,8 @@ func (s *Service) MakeupCheckIn(userID, date string) (*model.Checkin, error) {
 	if date >= today {
 		return nil, model.NewValidationError("date", "补签日期必须早于今天")
 	}
-	if existing, err := s.store.GetCheckinByUserDate(userID, date); err == nil && existing.Source == model.SourceMakeup {
-		return nil, model.NewValidationError("date", "该日期已补签，无需重复补签")
+	if _, err := s.store.GetCheckinByUserDate(userID, date); err == nil {
+		return nil, model.NewValidationError("date", "该日期已签到，无需补签")
 	}
 	card, err := s.store.GetMakeupCard(userID)
 	if err != nil {

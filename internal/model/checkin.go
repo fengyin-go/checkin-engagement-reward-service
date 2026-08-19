@@ -14,7 +14,6 @@ var dateRe = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
 const (
 	SourceNormal = "normal" // 正常签到
 	SourceMakeup = "makeup" // 补签
-	SourceRetry  = "retry"  // 重试补写
 )
 
 // Checkin 一条签到记录，一个用户一天最多一条。

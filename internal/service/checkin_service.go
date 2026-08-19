@@ -23,7 +23,6 @@ func (s *Service) CheckIn(userID string) (*model.Checkin, error) {
 		ID:        idgen.Hex(),
 		UserID:    userID,
 		Date:      date,
-		Source:    model.SourceNormal,
 		CreatedAt: now,
 	}
 	if err := s.store.CreateCheckin(c); err != nil {

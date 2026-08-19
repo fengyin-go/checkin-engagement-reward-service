@@ -6,7 +6,7 @@ func (s *MemoryStore) CreateCheckin(c *model.Checkin) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, exist := range s.checkins {
-		if exist.UserID == c.UserID && exist.Date == c.Date && exist.Source == c.Source {
+		if exist.UserID == c.UserID && exist.Date == c.Date {
 			return ErrConflict
 		}
 	}
