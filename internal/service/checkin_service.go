@@ -48,9 +48,7 @@ func (s *Service) GetSummary(userID string) (*CheckinSummary, error) {
 	dates := make([]string, 0, len(records))
 	now := time.Now()
 	for _, c := range records {
-		if c.Source != model.SourceMakeup {
-			dates = append(dates, c.Date)
-		}
+		dates = append(dates, c.Date)
 	}
 	streak := computeStreak(dates, now)
 	todaySigned := contains(dates, model.DateOf(now))
