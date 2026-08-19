@@ -16,6 +16,7 @@ var (
 type Store interface {
 	CreateUser(u *model.User) error
 	GetUser(id string) (*model.User, error)
+	GetUserByName(name string) (*model.User, error)
 	ListUsers() []*model.User
 	UpdateUser(u *model.User) error
 	DeleteUser(id string) error

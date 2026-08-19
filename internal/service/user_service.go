@@ -14,6 +14,9 @@ func (s *Service) CreateUser(name string) (*model.User, error) {
 	if err := u.Validate(); err != nil {
 		return nil, err
 	}
+	if _, err := s.store.GetUserByName(u.Name); err == nil {
+		return nil, model.NewValidationError("name", "用户名称已存在")
+	}
 	u.ID = idgen.Hex()
 	u.CreatedAt = time.Now()
 	if err := s.store.CreateUser(u); err != nil {
@@ -55,10 +58,15 @@ func (s *Service) UpdateUser(id, name string) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	u.Name = name
-	if err := u.Validate(); err != nil {
+	// 在独立对象上校验新名称，避免覆写存储中的用户而干扰同名检查。
+	candidate := &model.User{Name: name}
+	if err := candidate.Validate(); err != nil {
 		return nil, err
 	}
+	if exist, err := s.store.GetUserByName(candidate.Name); err == nil && exist.ID != u.ID {
+		return nil, model.NewValidationError("name", "用户名称已存在")
+	}
+	u.Name = candidate.Name
 	if err := s.store.UpdateUser(u); err != nil {
 		return nil, err
 	}
