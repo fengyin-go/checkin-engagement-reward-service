@@ -50,7 +50,7 @@ func (b *Badge) TypeLabel() string {
 	case BadgeStreak:
 		return "连续签到天数"
 	case BadgeTotalChecks:
-		return "签到记录数"
+		return "累计签到次数"
 	default:
 		return string(b.Type)
 	}

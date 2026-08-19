@@ -89,7 +89,7 @@ func (s *Service) UserBadges(userID string) (*UserBadgeProgress, error) {
 	}
 	metrics := map[model.BadgeType]int{
 		model.BadgeStreak:      summary.Streak,
-		model.BadgeTotalDays:   len(records),
+		model.BadgeTotalDays:   len(uniqueDays),
 		model.BadgeTotalChecks: len(records),
 	}
 	badges := s.store.ListBadges()
@@ -105,7 +105,7 @@ func (s *Service) UserBadges(userID string) (*UserBadgeProgress, error) {
 	// 已达成者排前面，同组按阈值升序。
 	sort.Slice(prog, func(i, j int) bool {
 		if prog[i].Achieved != prog[j].Achieved {
-			return !prog[i].Achieved
+			return prog[i].Achieved
 		}
 		return prog[i].Badge.Threshold < prog[j].Badge.Threshold
 	})
