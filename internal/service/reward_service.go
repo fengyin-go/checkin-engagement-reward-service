@@ -26,7 +26,10 @@ func (s *Service) GetReward(id string) (*model.Reward, error) {
 func (s *Service) ListRewards() ([]*model.Reward, error) {
 	all := s.store.ListRewards()
 	sort.Slice(all, func(i, j int) bool {
-		return all[i].RequiredDays < all[j].RequiredDays
+		if all[i].RequiredDays != all[j].RequiredDays {
+			return all[i].RequiredDays < all[j].RequiredDays
+		}
+		return all[i].Points > all[j].Points
 	})
 	return all, nil
 }
