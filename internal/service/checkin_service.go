@@ -108,6 +108,9 @@ func (s *Service) MonthlyStats(month string) (*MonthlyStats, error) {
 	total := 0
 	for _, c := range all {
 		if month == "" || strings.HasPrefix(c.Date, month) {
+			if _, err := s.store.GetUser(c.UserID); err != nil {
+				continue
+			}
 			total++
 			userSet[c.UserID] = true
 		}
