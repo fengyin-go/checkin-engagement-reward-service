@@ -20,7 +20,7 @@ func (r *Reward) Validate() error {
 	if r.Points < 0 {
 		return NewValidationError("points", "奖励积分不能为负数")
 	}
-	if r.RequiredDays <= 0 {
+	if r.RequiredDays < 1 {
 		return NewValidationError("required_days", "所需连续天数必须大于 0")
 	}
 	return nil

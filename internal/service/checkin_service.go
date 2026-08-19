@@ -55,7 +55,7 @@ func (s *Service) GetSummary(userID string) (*CheckinSummary, error) {
 	return &CheckinSummary{
 		UserID:      userID,
 		Streak:      streak,
-		TotalDays:   len(dates),
+		TotalDays:   len(records),
 		TodaySigned: todaySigned,
 	}, nil
 }

@@ -22,7 +22,7 @@ func (s *MemoryStore) GetReward(id string) (*model.Reward, error) {
 func (s *MemoryStore) ListRewards() []*model.Reward {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	list := make([]*model.Reward, 0)
+	list := make([]*model.Reward, 0, len(s.rewards))
 	for _, r := range s.rewards {
 		list = append(list, r)
 	}

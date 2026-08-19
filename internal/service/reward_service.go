@@ -62,7 +62,7 @@ func (s *Service) ClaimableRewards(userID string) ([]*model.Reward, error) {
 	rewards := s.store.ListRewards()
 	claimable := make([]*model.Reward, 0)
 	for _, r := range rewards {
-		if summary.Streak > r.RequiredDays {
+		if summary.Streak >= r.RequiredDays {
 			claimable = append(claimable, r)
 		}
 	}
