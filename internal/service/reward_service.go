@@ -36,17 +36,18 @@ func (s *Service) UpdateReward(id string, r model.Reward) (*model.Reward, error)
 	if err != nil {
 		return nil, err
 	}
-	exist.Name = r.Name
-	exist.Points = r.Points
-	exist.RequiredDays = r.RequiredDays
-	exist.Description = r.Description
-	if err := exist.Validate(); err != nil {
+	updated := *exist
+	updated.Name = r.Name
+	updated.Points = r.Points
+	updated.RequiredDays = r.RequiredDays
+	updated.Description = r.Description
+	if err := updated.Validate(); err != nil {
 		return nil, err
 	}
-	if err := s.store.UpdateReward(exist); err != nil {
+	if err := s.store.UpdateReward(&updated); err != nil {
 		return nil, err
 	}
-	return exist, nil
+	return &updated, nil
 }
 
 func (s *Service) DeleteReward(id string) error {
