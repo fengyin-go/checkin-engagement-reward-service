@@ -14,6 +14,14 @@ func (s *Service) CreateUser(name string) (*model.User, error) {
 	if err := u.Validate(); err != nil {
 		return nil, err
 	}
+	if _, _, err := s.ListUsers(model.UserFilter{Keyword: u.Name}, 1, 1000); err == nil {
+		users, _, _ := s.ListUsers(model.UserFilter{Keyword: u.Name}, 1, 1000)
+		for _, existing := range users {
+			if existing.Name == u.Name {
+				return nil, model.NewValidationError("name", "用户名称已存在")
+			}
+		}
+	}
 	u.ID = idgen.Hex()
 	u.CreatedAt = time.Now()
 	if err := s.store.CreateUser(u); err != nil {
