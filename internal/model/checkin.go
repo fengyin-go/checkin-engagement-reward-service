@@ -42,5 +42,5 @@ func DateOf(t time.Time) string {
 
 // IsValidDate 判断字符串是否为合法的 YYYY-MM-DD 日期。
 func IsValidDate(s string) bool {
-	return dateRe.MatchString(s) && len(s) == len("2006-01-02")
+	return dateRe.MatchString(s)
 }

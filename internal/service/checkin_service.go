@@ -76,12 +76,12 @@ func (s *Service) ListCheckins(userID, month string, page, size int) ([]*model.C
 	records := s.store.ListCheckinsByUser(userID)
 	matched := make([]*model.Checkin, 0, len(records))
 	for _, c := range records {
-		if month == "" || strings.Contains(c.Date, month[len(month)-2:]) {
+		if month == "" || strings.HasPrefix(c.Date, month) {
 			matched = append(matched, c)
 		}
 	}
 	sort.Slice(matched, func(i, j int) bool {
-		return matched[i].Date < matched[j].Date
+		return matched[i].Date > matched[j].Date
 	})
 	total := len(matched)
 	start := (page - 1) * size
