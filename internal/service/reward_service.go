@@ -25,10 +25,24 @@ func (s *Service) GetReward(id string) (*model.Reward, error) {
 
 func (s *Service) ListRewards() ([]*model.Reward, error) {
 	all := s.store.ListRewards()
-	sort.Slice(all, func(i, j int) bool {
-		return all[i].RequiredDays < all[j].RequiredDays
-	})
+	sortRewardsByDaysThenPoints(all)
 	return all, nil
+}
+
+// rewardLess 定义奖励列表的展示顺序：先按所需连续天数升序，
+// 天数相同时再按积分降序（积分高的排在前面）。
+func rewardLess(a, b *model.Reward) bool {
+	if a.RequiredDays != b.RequiredDays {
+		return a.RequiredDays < b.RequiredDays
+	}
+	return a.Points > b.Points
+}
+
+// sortRewardsByDaysThenPoints 按展示顺序对奖励切片进行稳定排序。
+func sortRewardsByDaysThenPoints(rs []*model.Reward) {
+	sort.SliceStable(rs, func(i, j int) bool {
+		return rewardLess(rs[i], rs[j])
+	})
 }
 
 func (s *Service) UpdateReward(id string, r model.Reward) (*model.Reward, error) {
@@ -66,8 +80,6 @@ func (s *Service) ClaimableRewards(userID string) ([]*model.Reward, error) {
 			claimable = append(claimable, r)
 		}
 	}
-	sort.Slice(claimable, func(i, j int) bool {
-		return claimable[i].RequiredDays < claimable[j].RequiredDays
-	})
+	sortRewardsByDaysThenPoints(claimable)
 	return claimable, nil
 }
