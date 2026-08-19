@@ -25,7 +25,7 @@ func (s *MemoryStore) GetBadge(id string) (*model.Badge, error) {
 func (s *MemoryStore) ListBadges() []*model.Badge {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	list := make([]*model.Badge, 0, len(s.badges))
+	list := make([]*model.Badge, 0)
 	for _, b := range s.badges {
 		list = append(list, b)
 	}
