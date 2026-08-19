@@ -48,7 +48,7 @@ func (s *MemoryStore) ListCheckins() []*model.Checkin {
 func (s *MemoryStore) ListCheckinsByUser(userID string) []*model.Checkin {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	list := make([]*model.Checkin, 0)
+	list := make([]*model.Checkin, 0, len(s.checkins))
 	for _, c := range s.checkins {
 		if c.UserID == userID {
 			list = append(list, c)
