@@ -18,12 +18,12 @@ func (s *Service) GrantMakeupCard(userID string, amount int) (*model.MakeupCard,
 	}
 	card, err := s.store.GetMakeupCard(userID)
 	if err != nil {
-		card = &model.MakeupCard{ID: idgen.Hex(), UserID: userID, Balance: 0, UpdatedAt: time.Now()}
+		card = &model.MakeupCard{ID: idgen.Hex(), UserID: userID, Balance: 0, UpdatedAt: time.Now().UTC()}
 		if err := s.store.CreateMakeupCard(card); err != nil {
 			return nil, err
 		}
 	}
-	card.Balance += amount
+	card.Balance = amount
 	card.UpdatedAt = time.Now()
 	if err := s.store.UpdateMakeupCard(card); err != nil {
 		return nil, err
