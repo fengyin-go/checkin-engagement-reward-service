@@ -21,14 +21,10 @@ func (s *Service) StreakLeaderboard(limit int) ([]LeaderboardEntry, error) {
 	entries := make([]LeaderboardEntry, 0, len(users))
 	for _, u := range users {
 		records := s.store.ListCheckinsByUser(u.ID)
-		dates := make([]string, 0, len(records))
-		for _, c := range records {
-			dates = append(dates, c.Date)
-		}
 		entries = append(entries, LeaderboardEntry{
 			UserID: u.ID,
 			Name:   u.Name,
-			Value:  computeStreak(dates, now),
+			Value:  computeStreak(recordCheckinDates(records), now),
 		})
 	}
 	sort.Slice(entries, func(i, j int) bool {

@@ -45,13 +45,8 @@ func (s *Service) GetSummary(userID string) (*CheckinSummary, error) {
 		return nil, err
 	}
 	records := s.store.ListCheckinsByUser(userID)
-	dates := make([]string, 0, len(records))
+	dates := recordCheckinDates(records)
 	now := time.Now()
-	for _, c := range records {
-		if c.Source != model.SourceMakeup {
-			dates = append(dates, c.Date)
-		}
-	}
 	streak := computeStreak(dates, now)
 	todaySigned := contains(dates, model.DateOf(now))
 	return &CheckinSummary{
